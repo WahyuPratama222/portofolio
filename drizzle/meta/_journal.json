@@ -8,6 +8,20 @@
       "when": 1789449084245,
       "tag": "0000_cloudy_monster_badoon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794665397094,
+      "tag": "0001_tiresome_gambit",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795161000819,
+      "tag": "0002_lame_luckman",
+      "breakpoints": true
     }
   ]
 }

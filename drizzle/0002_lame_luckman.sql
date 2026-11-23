@@ -1,0 +1,2 @@
+CREATE TYPE "public"."experience_type" AS ENUM('work', 'freelance', 'organization');--> statement-breakpoint
+ALTER TABLE "experiences" ADD COLUMN "type" "experience_type" DEFAULT 'organization' NOT NULL;
