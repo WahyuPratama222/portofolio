@@ -34,8 +34,10 @@ export default defineConfig(
 		}
 	},
 	{
-		// Override or add rule settings here, such as:
-		// 'svelte/button-has-type': 'error'
-		rules: {}
+		files: ['**/*.svelte'],
+		rules: {
+			// Site is served from the root domain, so resolve() adds no value here
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 );
