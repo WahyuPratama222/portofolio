@@ -1,0 +1,323 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Theme tokens
+   ========================================================================== */
+
+@theme {
+	--color-matcha: #8ab17d;
+	--color-matcha-glow: #a3c995;
+	--color-bg: #1c1815;
+	--color-bg-card: #25201c;
+	--color-bg-nav: #201b17;
+	--color-text: #e6dfd5;
+	--color-text-muted: #d8cfc1;
+	--color-border: #38302a;
+
+	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/* No global scroll-behavior: smooth here. It made every page change (e.g. opening /project)
+   visibly animate the scroll back to the top. Smooth scrolling for in-page links is done in
+   $lib/utils/scroll.ts instead. */
+
+body {
+	background-color: var(--color-bg);
+	/* Soft matcha glows + a faint dot grid. This scrolls with the page (no fixed full-screen
+	   layer), so the browser paints it once and only moves it, which is much cheaper. */
+	background-image:
+		radial-gradient(55rem 38rem at 88% 0, rgba(138, 177, 125, 0.1), transparent 65%),
+		radial-gradient(48rem 34rem at 0 38%, rgba(138, 177, 125, 0.06), transparent 65%),
+		radial-gradient(48rem 34rem at 100% 78%, rgba(138, 177, 125, 0.05), transparent 65%),
+		radial-gradient(rgba(230, 223, 213, 0.06) 1px, transparent 1px);
+	background-size:
+		auto,
+		auto,
+		auto,
+		26px 26px;
+	background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+	color: var(--color-text);
+	font-family: var(--font-mono);
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	font-size: 16px;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+/* Scroll reveal: the "reveal" class is added by the reveal action ($lib/actions/reveal.ts) */
+.reveal {
+	opacity: 0;
+	transform: translateY(28px);
+	transition:
+		opacity 0.7s ease-out,
+		transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.revealed {
+	opacity: 1;
+	transform: none;
+}
+
+/* Entrance animation for content that is already on screen when the page opens */
+.enter {
+	animation: enter-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes enter-up {
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+}
+
+/* Typewriter heading (PageHeading.svelte): --n is the number of characters */
+.type {
+	display: inline-block;
+	vertical-align: bottom;
+	overflow: hidden;
+	white-space: nowrap;
+	animation: typing calc(var(--n) * 60ms) steps(var(--n)) 0.2s both;
+}
+
+@keyframes typing {
+	from {
+		width: 0;
+	}
+	to {
+		width: calc(var(--n) * 1ch);
+	}
+}
+
+.cursor {
+	display: inline-block;
+	width: 0.6ch;
+	height: 1.1em;
+	margin-left: 2px;
+	vertical-align: text-bottom;
+	background: var(--color-matcha);
+	animation: blink 1s steps(1) 8 forwards;
+}
+
+@keyframes blink {
+	0%,
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		opacity: 0;
+	}
+}
+
+/* Light that runs along the top/bottom edge of a card (transform only, so it stays cheap) */
+.edge-light {
+	position: absolute;
+	left: 0;
+	width: 35%;
+	height: 2px;
+	pointer-events: none;
+	background: linear-gradient(to right, transparent, var(--color-matcha), transparent);
+	box-shadow: 0 0 10px var(--color-matcha);
+	animation: edge-run 5s linear infinite;
+}
+
+.edge-top {
+	top: 0;
+}
+
+.edge-bottom {
+	bottom: 0;
+	animation-direction: reverse;
+	animation-delay: -2.5s;
+}
+
+@keyframes edge-run {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(300%);
+	}
+}
+
+/* Progress line shown while navigating between pages (transform only, so it stays cheap).
+   The 0.15s delay keeps it hidden for fast page changes, so it never flickers. */
+.nav-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 60;
+	width: 100%;
+	height: 2px;
+	background: var(--color-matcha);
+	box-shadow: 0 0 10px var(--color-matcha);
+	transform-origin: left;
+	animation: nav-progress 8s cubic-bezier(0.1, 0.8, 0.2, 1) 0.15s both;
+}
+
+@keyframes nav-progress {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(0.9);
+	}
+}
+
+/* ==========================================================================
+   Blog article typography (.prose-term)
+   ========================================================================== */
+
+.prose-term {
+	color: #f1ebe2;
+	line-height: 1.85;
+	font-size: 1rem;
+}
+
+.prose-term > * + * {
+	margin-top: 1.25rem;
+}
+
+.prose-term h2 {
+	margin-top: 2.5rem;
+	font-size: 1.45rem;
+	font-weight: 700;
+	color: #ffffff;
+}
+
+.prose-term h3 {
+	margin-top: 2rem;
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #ffffff;
+}
+
+.prose-term p,
+.prose-term li {
+	color: #e8e0d4;
+}
+
+.prose-term strong {
+	color: #ffffff;
+	font-weight: 700;
+}
+
+.prose-term a {
+	color: #a9d39a;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.prose-term ul,
+.prose-term ol {
+	padding-left: 1.4rem;
+}
+
+.prose-term ul {
+	list-style: '> ';
+}
+
+.prose-term ol {
+	list-style: decimal;
+}
+
+.prose-term li + li {
+	margin-top: 0.4rem;
+}
+
+.prose-term li::marker {
+	color: var(--color-matcha);
+	font-family: monospace;
+}
+
+.prose-term blockquote {
+	border-left: 3px solid var(--color-matcha);
+	background: var(--color-bg);
+	padding: 0.75rem 1rem;
+	border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.prose-term blockquote p {
+	color: #f1ebe2;
+}
+
+.prose-term hr {
+	border-color: var(--color-border);
+}
+
+.prose-term img {
+	border-radius: 0.5rem;
+	border: 1px solid var(--color-border);
+}
+
+/* Inline code */
+.prose-term :not(pre) > code {
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: 0.3rem;
+	padding: 0.1rem 0.4rem;
+	font-size: 0.85em;
+	color: #a9d39a;
+}
+
+/* Code blocks (rendered by Shiki on the server). Darker than the article frame so they stand out. */
+.prose-term .code-block {
+	overflow: hidden;
+	border: 1px solid var(--color-border);
+	border-radius: 0.75rem;
+	background: var(--color-bg);
+}
+
+.prose-term .code-head {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	background: var(--color-bg-nav);
+	border-bottom: 1px solid var(--color-border);
+	font-family: monospace;
+	font-size: 0.75rem;
+	color: #fff;
+}
+
+.prose-term .shiki {
+	margin: 0;
+	padding: 1rem;
+	overflow-x: auto;
+	font-size: 0.875rem;
+	line-height: 1.7;
+	background: transparent !important; /* keep the site's own brown background */
+}
+
+.prose-term .shiki code {
+	font-family: inherit;
+}
+
+/* ==========================================================================
+   Reduced motion: turn every animation above off (kept last so it wins)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+
+	.enter,
+	.type {
+		animation: none;
+	}
+
+	.cursor,
+	.edge-light,
+	.nav-progress {
+		display: none;
+	}
+}
