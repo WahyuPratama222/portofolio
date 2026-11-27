@@ -1,0 +1,18 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: '0 0 */3 * *' # every 3 days at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase database
+        # -f: exit with error on HTTP failure, -sS: silent but show errors
+        run: |
+          curl -fsS --request GET \
+            --url '${{ secrets.SUPABASE_URL }}/rest/v1/tags?select=id&limit=1' \
+            --header 'apikey: ${{ secrets.SUPABASE_ANON_KEY }}' \
+            --header 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}'
